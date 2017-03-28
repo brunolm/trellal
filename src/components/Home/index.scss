@@ -4,4 +4,48 @@ body {
   .color-test {
     color: $green;
   }
+
+  .board {
+    clear: both;
+    margin-bottom: 2px;
+    overflow-x: auto;
+    padding: 10px;
+    white-space: nowrap;
+
+    h2 {
+      color: #fff;
+    }
+  }
+
+  .list {
+    background: #E2E4E6;
+    border-radius: 6px;
+    display: inline-block;
+    margin-right: 10px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 10px;
+    vertical-align: top;
+    width: 250px;
+    white-space: normal;
+  }
+
+  .card-container {
+    padding: 0;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 6px;
+    font-size: 90%;
+    padding: 10px;
+
+    .member {
+      background: #eee;
+      font-size: 90%;
+      margin-bottom: 4px;
+      padding: 4px;
+      border-radius: 10px;
+    }
+  }
 }

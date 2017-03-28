@@ -36,6 +36,7 @@ async function getOrganizationBoards(req, keys, orgId) {
 
   for (let board of data) {
     board.lists = await getBoardLists(req, keys, board.id);
+    board.members = await getBoardMembers(req, keys, board.id);
   }
 
   return data;

@@ -72,16 +72,20 @@ export default class Home extends React.Component<Home.Props, Home.State> {
         <hr />
         <div>
           { this.props.boards.map(board =>
-            <div>
-              { board.id } { board.name }
+            <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
+              <h2>{ board.name }</h2>
               { board.lists.map(list =>
-                <div key={ list.id }>
+                <div key={ list.id } className="list">
                   { list.name }
-                  <ul>
+                  <ul className="card-container">
                     { list.cards.map(card =>
-                      <li key={ card.id }>
+                      <li key={ card.id } className="card">
                         { card.name }
-                        { JSON.stringify(card) }
+                        { board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
+                          <div key={ member.id } className="member">
+                            { member.fullName }
+                          </div>
+                        )}
                       </li>
                     )}
                   </ul>
