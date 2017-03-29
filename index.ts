@@ -4,7 +4,8 @@ app.use('/api', require('./src/api'));
 
 app.use('/login', (req, res) => {
   const virtualHost = process.env.VIRTUAL_HOST || 'localhost:3000';
-  const returnUrl = `http://${virtualHost}`;
+  const protocol = process.env.PROTOCOL || 'http';
+  const returnUrl = `${protocol}://${virtualHost}`;
   const key = process.env.TRELLO_KEY;
 
   res.redirect(`https://trello.com/1/authorize?expiration=never&name=Trellal&scope=read&return_url=${returnUrl}&key=${key}`);
