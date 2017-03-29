@@ -1,7 +1,7 @@
 {
   "name": "trellal",
   "version": "1.3.0",
-  "description": "Trello All. See all Trello projects in a single screen.",
+  "description": "Trello All, see all boards from an organization in a single screen. That allows for a unique workflow, single Kanban.",
   "scripts": {
     "start": "ts-node index.ts",
     "postinstall": "npm run build",
