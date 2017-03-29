@@ -4,6 +4,7 @@
   "description": "Trello All. See all Trello projects in a single screen.",
   "scripts": {
     "start": "ts-node index.ts",
+    "postinstall": "npm run build",
     "build": "npm run clean && npm run build:vendor && npm run build:app",
     "build:app": "webpack --config webpack.config.js",
     "build:vendor": "webpack --config webpack.config.vendor.js",
