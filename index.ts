@@ -17,7 +17,7 @@ app.use((req, res) => {
   res.render('index.cshtml', model);
 });
 
-const server = app.listen(+process.env.VIRTUAL_PORT || 3000, '0.0.0.0', function () {
+const server = app.listen(+process.env.PORT || +process.env.VIRTUAL_PORT || 3000, '0.0.0.0', function () {
   console.log();
   console.log(`Listening at 0.0.0.0:${server.address().port}`);
   console.log(`Virtual url http://${process.env.VIRTUAL_HOST || 'localhost'}`);
