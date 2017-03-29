@@ -27,12 +27,12 @@ async function getBoards(req, keys) {
 }
 
 async function getOrganizations(req, keys) {
-  const { data } = await req.get(`/members/me/organizations?${getQuery(keys)}`);
+  const { data } = await req.get(`/members/me/organizations?fields=displayName&${getQuery(keys)}`);
   return data;
 }
 
 async function getOrganizationBoards(req, keys, orgId) {
-  const { data } = await req.get(`/organizations/${orgId}/boards?${getQuery(keys)}`);
+  const { data } = await req.get(`/organizations/${orgId}/boards?filter=open&fields=prefs,name&${getQuery(keys)}`);
 
   for (let board of data) {
     board.lists = await getBoardLists(req, keys, board.id);
@@ -43,11 +43,11 @@ async function getOrganizationBoards(req, keys, orgId) {
 }
 
 async function getBoardLists(req, keys, boardId) {
-  const { data } = await req.get(`/boards/${boardId}/lists?cards=open&${getQuery(keys)}`);
+  const { data } = await req.get(`/boards/${boardId}/lists?cards=open&fields=name,pos&filter=open&${getQuery(keys)}`);
   return data;
 }
 
 async function getBoardMembers(req, keys, boardId) {
-  const { data } = await req.get(`/boards/${boardId}/members?${getQuery(keys)}`);
+  const { data } = await req.get(`/boards/${boardId}/members?fields=avatarHash,fullName,username,initials&${getQuery(keys)}`);
   return data;
 }

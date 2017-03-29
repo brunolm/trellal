@@ -7,12 +7,11 @@ export const types = mirror('Home', {
 
   SelectOrganization: undefined,
 
-  GetBoardsSuccess: undefined,
-  GetBoardsError: undefined,
-
+  GetOrganizationsStart: undefined,
   GetOrganizationsSuccess: undefined,
   GetOrganizationsError: undefined,
 
+  GetOrganizationBoardStart: undefined,
   GetOrganizationBoardSuccess: undefined,
   GetOrganizationBoardError: undefined,
 });
@@ -21,27 +20,9 @@ export function init() {
   return { type: types.Init };
 }
 
-export function selectOrganization(selectedOrgId) {
-  return { type: types.SelectOrganization, data: selectedOrgId };
-}
-
-export function getBoards(token) {
-  return dispatch => {
-    $.ajax({
-      url: '/api/get-boards',
-      data: { token },
-      success(r) {
-        return dispatch({ type: types.GetBoardsSuccess, data: r });
-      },
-      error() {
-        return dispatch({ type: types.GetBoardsError, error: true });
-      }
-    });
-  };
-}
-
 export function getOrganizations(token) {
   return dispatch => {
+    dispatch({ type: types.GetOrganizationsStart });
     $.ajax({
       url: '/api/get-organizations',
       data: { token },
@@ -57,6 +38,14 @@ export function getOrganizations(token) {
 
 export function getBoardsByOrg(token, orgId) {
   return dispatch => {
+    dispatch({ type: types.GetOrganizationBoardStart });
+
+    if (!orgId) {
+      return dispatch({ type: types.GetOrganizationBoardError, error: new Error('orgId is undefined') });
+    }
+
+    dispatch({ type: types.SelectOrganization, data: orgId });
+
     $.ajax({
       url: '/api/get-organization-boards',
       data: { token, orgId },

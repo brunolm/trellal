@@ -44,6 +44,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "serve-favicon": "^2.4.1",
+    "tether": "^1.4.0",
     "ts-node": "^3.0.2",
     "uri-sharp": "^1.0.1",
     "vash": "^0.12.2"

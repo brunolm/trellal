@@ -8,6 +8,8 @@ const InitialState = {
   organizations: [],
   selectedOrgId: undefined,
   error: undefined,
+  boardsLoading: false,
+  organizationsLoading: false,
 };
 
 const home = (state = InitialState, action) => {
@@ -21,43 +23,42 @@ const home = (state = InitialState, action) => {
         selectedOrgId: action.data,
       };
 
-    case types.GetBoardsSuccess:
+    case types.GetOrganizationsStart:
       return {
         ...state,
-        boards: action.data,
+        organizationsLoading: true,
       };
-
-    case types.GetBoardsError:
-      return {
-        ...state,
-        boards: [],
-        error: true,
-      };
-
     case types.GetOrganizationsSuccess:
       return {
         ...state,
         organizations: action.data,
+        organizationsLoading: false,
       };
-
     case types.GetOrganizationsError:
       return {
         ...state,
         organizations: [],
         error: true,
+        organizationsLoading: false,
       };
 
+    case types.GetOrganizationBoardStart:
+      return {
+        ...state,
+        boardsLoading: true,
+      };
     case types.GetOrganizationBoardSuccess:
       return {
         ...state,
         boards: action.data,
+        boardsLoading: false,
       };
-
     case types.GetOrganizationBoardError:
       return {
         ...state,
         boards: [],
         error: true,
+        boardsLoading: false,
       };
 
     default:

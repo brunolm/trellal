@@ -1,5 +1,8 @@
 import './index.scss';
+import 'jquery';
+import 'bootstrap';
 
+import * as $ from 'jquery';
 import * as React from 'react';
 import * as actions from '../../actions/home';
 
@@ -8,6 +11,8 @@ import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import parseUri from 'uri-sharp';
 
+(window as any).jQuery = (window as any).$ = $;
+
 export namespace Home {
   export interface Props extends RouteComponentProps<void> {
     title: string;
@@ -15,9 +20,13 @@ export namespace Home {
     organizations: any[];
     selectedOrgId: string;
     dispatch: any;
+    boardsLoading: boolean;
+    organizationsLoading: boolean;
   }
 
-  export interface State { }
+  export interface State {
+    hiddenBoards: string[];
+  }
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -33,6 +42,10 @@ export default class Home extends React.Component<Home.Props, Home.State> {
   constructor(props) {
     super(props);
 
+    this.state = {
+      hiddenBoards: [],
+    };
+
     const { hash }: any = parseUri(window.location.href);
 
     if (hash.token) {
@@ -40,6 +53,10 @@ export default class Home extends React.Component<Home.Props, Home.State> {
     }
     else if (!this.token) {
       window.location.replace('/login');
+    }
+
+    if (this.token) {
+      this.props.dispatch(actions.getOrganizations(this.token));
     }
   }
 
@@ -51,48 +68,68 @@ export default class Home extends React.Component<Home.Props, Home.State> {
     localStorage.setItem(Home.tokenSettingKey, value);
   }
 
+  hideBoard(boardId) {
+    const { hiddenBoards } = this.state;
+
+    const index = hiddenBoards.indexOf(boardId);
+
+    if (index === -1) {
+      hiddenBoards.push(boardId);
+    }
+    else {
+      hiddenBoards.splice(index, 1);
+    }
+
+    this.setState({
+      hiddenBoards,
+    });
+  }
+
   render() {
     return (
       <div>
-        <h1 className="color-test">Trellal! { this.props.title }</h1>
-
-        <button className="btn btn-default" onClick={ () => this.props.dispatch(actions.getBoards(this.token)) }>Get Boards</button>
-        <button className="btn btn-default" onClick={ () => this.props.dispatch(actions.getOrganizations(this.token)) }>Get Orgs</button>
-
-        <select onChange={ (e) => this.props.dispatch(actions.selectOrganization(e.target.value)) }>
-          {this.props.organizations.map(org =>
-            <option key={ org.id } value={ org.id }>{ org.name }</option>
-          )}
-        </select>
-
-        <span>{ this.props.selectedOrgId }</span>
-
-        <button className="btn btn-default" onClick={ () => this.props.dispatch(actions.getBoardsByOrg(this.token, this.props.selectedOrgId)) }>Get Org Boards</button>
-
-        <hr />
+        <div className="filters">
+          <div className="row">
+            <div className="col-12 col-sm-6 form-inline">
+              <select className="form-control"
+                disabled={ this.props.organizationsLoading || this.props.boardsLoading }
+                onChange={ (e) => this.props.dispatch(actions.getBoardsByOrg(this.token, e.target.value)) }>
+                <option value="">{ this.props.organizationsLoading ? 'Loading...' : 'Select organization...' }</option>
+                { this.props.organizations.map(org =>
+                  <option key={ org.id } value={ org.id }>{ org.displayName }</option>
+                ) }
+              </select>
+              { this.props.boardsLoading &&
+                <i className="fa fa-spinner fa-spin ml-2"></i>
+              }
+            </div>
+          </div>
+        </div>
         <div>
           { this.props.boards.map(board =>
             <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
-              <h2>{ board.name }</h2>
-              { board.lists.map(list =>
-                <div key={ list.id } className="list">
-                  { list.name }
-                  <ul className="card-container">
-                    { list.cards.map(card =>
-                      <li key={ card.id } className="card">
-                        { card.name }
-                        { board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
-                          <div key={ member.id } className="member">
-                            { member.fullName }
+              <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
+              <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
+                { board.lists.map(list =>
+                  <div key={ list.id } className="list">
+                    <span>{ list.name }</span>
+                    <ul className="card-container">
+                      { list.cards.map(card =>
+                        <li key={ card.id } className="card">
+                          { card.name }
+                          <div className="members">
+                            { board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
+                              <img key={ member.id } alt={ member.initials } title={ member.fullName } src={ `http://trello-avatars.s3.amazonaws.com/${member.avatarHash}/30.png` } />
+                            ) }
                           </div>
-                        )}
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
+                        </li>
+                      ) }
+                    </ul>
+                  </div>
+                ) }
+              </div>
             </div>
-          )}
+          ) }
         </div>
       </div>
     );

@@ -1,8 +1,13 @@
-$green: green;
+$bg-list: #E2E4E6;
+$color-main: #000;
+$bg-card: #fff;
+$bg-member: #eee;
 
 body {
-  .color-test {
-    color: $green;
+  .filters {
+    background: $color-main;
+    color: invert($color-main);
+    padding: 20px;
   }
 
   .board {
@@ -17,8 +22,12 @@ body {
     }
   }
 
+  .board-name {
+    cursor: pointer;
+  }
+
   .list {
-    background: #E2E4E6;
+    background: $bg-list;
     border-radius: 6px;
     display: inline-block;
     margin-right: 10px;
@@ -35,17 +44,15 @@ body {
   }
 
   .card {
-    background: #fff;
+    background: $bg-card;
     border-radius: 6px;
     font-size: 90%;
     padding: 10px;
 
-    .member {
-      background: #eee;
-      font-size: 90%;
-      margin-bottom: 4px;
-      padding: 4px;
-      border-radius: 10px;
+    .members {
+      img:not(:last-child) {
+        margin-right: 4px;
+      }
     }
   }
 }
