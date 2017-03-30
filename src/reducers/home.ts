@@ -11,6 +11,7 @@ const InitialState = {
   boardsLoading: false,
   organizationsLoading: false,
   selectedBoards: [],
+  selectedLists: [],
 };
 
 const home = (state = InitialState, action) => {
@@ -22,6 +23,12 @@ const home = (state = InitialState, action) => {
       return {
         ...state,
         selectedBoards: action.data,
+      };
+
+    case types.SetSelectedLists:
+      return {
+        ...state,
+        selectedLists: action.data,
       };
 
     case types.SelectOrganization:
@@ -60,6 +67,14 @@ const home = (state = InitialState, action) => {
         boards: action.data,
         boardsLoading: false,
         selectedBoards: action.data.map(board => ({ value: board.id, label: board.name })),
+        selectedLists: action.data
+          .map(board => board.lists || [])
+          .reduce((a, next) => {
+            a = a.concat(next);
+            return a;
+          }, [])
+          .map(list => ({ value: list.id, label: list.name }))
+          .sort((a, b) => a.label.localeCompare(b.label)),
       };
     case types.GetOrganizationBoardError:
       return {
@@ -68,6 +83,7 @@ const home = (state = InitialState, action) => {
         error: true,
         boardsLoading: false,
         selectedBoards: [],
+        selectedLists: [],
       };
 
     default:

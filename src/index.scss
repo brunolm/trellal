@@ -1,9 +1,11 @@
 body {
-  .Select-value-icon {
-    float: right;
-  }
-  .Select--multi .Select-value {
-    background: #0275d8;
-    color: #fff;
+  .Select--multi {
+    .Select-value-icon {
+      padding: 4px 8px 6px;
+    }
+    .Select-value {
+      background: #0275d8;
+      color: #fff;
+    }
   }
 }

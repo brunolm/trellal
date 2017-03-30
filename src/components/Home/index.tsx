@@ -24,6 +24,7 @@ export namespace Home {
     boardsLoading: boolean;
     organizationsLoading: boolean;
     selectedBoards: any[];
+    selectedLists: any[];
   }
 
   export interface State {
@@ -98,9 +99,19 @@ export default class Home extends React.Component<Home.Props, Home.State> {
   onSelectBoards(e) {
     this.props.dispatch(actions.setSelectedBoards(e));
   }
+  onSelectLists(e) {
+    this.props.dispatch(actions.setSelectedLists(e));
+  }
 
   render() {
     const filteredBoards = this.props.boards.filter(board => this.props.selectedBoards.map(sb => sb.value).indexOf(board.id) !== -1);
+    const filteredBoardLists = this.props.boards
+      .map(board => board.lists || [])
+      .reduce((a, next) => a.concat(next), [])
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const filteredLists = filteredBoardLists.filter(list => this.props.selectedLists.map(sl => sl.value).indexOf(list.id) !== -1)
+      .sort((a, b) => a.name.localeCompare(b.name));
 
     return (
       <div>
@@ -140,13 +151,31 @@ export default class Home extends React.Component<Home.Props, Home.State> {
               </div>
             </div>
           }
+
+
+          { this.props.selectedOrgId && !!this.props.boards.length &&
+            <div>
+              Lists
+
+              <div className="row">
+                <div className="col-12">
+                  <Select
+                    options={ filteredBoardLists.map(list => ({ value: list.id, label: list.name })) }
+                    multi
+                    value={ this.props.selectedLists }
+                    onChange={ (e) => this.onSelectLists(e) }
+                  />
+                </div>
+              </div>
+            </div>
+          }
         </div>
         <div>
           { filteredBoards.map(board =>
             <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
               <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
               <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
-                { board.lists.map(list =>
+                { board.lists.filter(list => filteredLists.map(fl => fl.id).indexOf(list.id) !== -1).map(list =>
                   <div key={ list.id } className="list">
                     <span>{ list.name }</span>
                     <ul className="card-container">

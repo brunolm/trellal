@@ -28,6 +28,7 @@ async function getBoards(req, keys) {
 
 async function getOrganizations(req, keys) {
   const { data } = await req.get(`/members/me/organizations?fields=displayName&${getQuery(keys)}`);
+  data.sort((a, b) => a.displayName.localeCompare(b.displayName));
   return data;
 }
 
@@ -39,6 +40,7 @@ async function getOrganizationBoards(req, keys, orgId) {
     board.members = await getBoardMembers(req, keys, board.id);
   }
 
+  data.sort((a, b) => a.name.localeCompare(b.name));
   return data;
 }
 

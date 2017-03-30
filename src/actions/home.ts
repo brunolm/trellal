@@ -6,6 +6,7 @@ export const types = mirror('Home', {
   Init: undefined,
 
   SetSelectedBoards: undefined,
+  SetSelectedLists: undefined,
 
   SelectOrganization: undefined,
 
@@ -24,6 +25,10 @@ export function init() {
 
 export function setSelectedBoards(boards) {
   return { type: types.SetSelectedBoards, data: boards };
+}
+
+export function setSelectedLists(lists) {
+  return { type: types.SetSelectedLists, data: lists };
 }
 
 export function getOrganizations(token) {
