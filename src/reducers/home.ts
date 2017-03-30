@@ -10,12 +10,19 @@ const InitialState = {
   error: undefined,
   boardsLoading: false,
   organizationsLoading: false,
+  selectedBoards: [],
 };
 
 const home = (state = InitialState, action) => {
   switch (action.type) {
     case types.Init:
       return clone(InitialState);
+
+    case types.SetSelectedBoards:
+      return {
+        ...state,
+        selectedBoards: action.data,
+      };
 
     case types.SelectOrganization:
       return {
@@ -52,6 +59,7 @@ const home = (state = InitialState, action) => {
         ...state,
         boards: action.data,
         boardsLoading: false,
+        selectedBoards: action.data.map(board => ({ value: board.id, label: board.name })),
       };
     case types.GetOrganizationBoardError:
       return {
@@ -59,6 +67,7 @@ const home = (state = InitialState, action) => {
         boards: [],
         error: true,
         boardsLoading: false,
+        selectedBoards: [],
       };
 
     default:

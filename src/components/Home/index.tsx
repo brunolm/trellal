@@ -4,6 +4,7 @@ import 'bootstrap';
 
 import * as $ from 'jquery';
 import * as React from 'react';
+import * as Select from 'react-select';
 import * as actions from '../../actions/home';
 
 import { RootState } from '../../reducers/index';
@@ -22,6 +23,7 @@ export namespace Home {
     dispatch: any;
     boardsLoading: boolean;
     organizationsLoading: boolean;
+    selectedBoards: any[];
   }
 
   export interface State {
@@ -85,28 +87,62 @@ export default class Home extends React.Component<Home.Props, Home.State> {
     });
   }
 
+  onOrganizationChange(e) {
+    this.props.dispatch(actions.getBoardsByOrg(this.token, e.target.value));
+  }
+
+  refreshBoards() {
+    this.props.dispatch(actions.getBoardsByOrg(this.token, this.props.selectedOrgId));
+  }
+
+  onSelectBoards(e) {
+    this.props.dispatch(actions.setSelectedBoards(e));
+  }
+
   render() {
+    const filteredBoards = this.props.boards.filter(board => this.props.selectedBoards.map(sb => sb.value).indexOf(board.id) !== -1);
+
     return (
       <div>
         <div className="filters">
           <div className="row">
             <div className="col-12 col-sm-6 form-inline">
-              <select className="form-control"
+              <select className="form-control mr-2"
                 disabled={ this.props.organizationsLoading || this.props.boardsLoading }
-                onChange={ (e) => this.props.dispatch(actions.getBoardsByOrg(this.token, e.target.value)) }>
+                onChange={ (e) => this.onOrganizationChange(e) }>
                 <option value="">{ this.props.organizationsLoading ? 'Loading...' : 'Select organization...' }</option>
                 { this.props.organizations.map(org =>
                   <option key={ org.id } value={ org.id }>{ org.displayName }</option>
                 ) }
               </select>
+              <button className="btn btn-primary mr-2" onClick={ () => this.refreshBoards() }>
+                <i className="fa fa-refresh" aria-hidden="true"></i>
+              </button>
               { this.props.boardsLoading &&
                 <i className="fa fa-spinner fa-spin ml-2"></i>
               }
             </div>
           </div>
+
+          { this.props.selectedOrgId && !!this.props.boards.length &&
+            <div>
+              Boards
+
+              <div className="row">
+                <div className="col-12">
+                  <Select
+                    options={ this.props.boards.map(board => ({ value: board.id, label: board.name })) }
+                    multi
+                    value={ this.props.selectedBoards }
+                    onChange={ (e) => this.onSelectBoards(e) }
+                  />
+                </div>
+              </div>
+            </div>
+          }
         </div>
         <div>
-          { this.props.boards.map(board =>
+          { filteredBoards.map(board =>
             <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
               <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
               <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>

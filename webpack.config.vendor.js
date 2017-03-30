@@ -32,6 +32,8 @@ module.exports = {
       'react-router-dom',
       'react-router-redux',
       'redux-thunk',
+      'react-select',
+      'react-select/dist/react-select.css',
     ],
   },
   output: {
