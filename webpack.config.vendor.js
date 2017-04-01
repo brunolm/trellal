@@ -34,6 +34,7 @@ module.exports = {
       'redux-thunk',
       'react-select',
       'react-select/dist/react-select.css',
+      'mirror-keys',
     ],
   },
   output: {

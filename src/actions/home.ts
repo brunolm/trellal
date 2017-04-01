@@ -1,8 +1,8 @@
 import * as $ from 'jquery';
 
-import mirror from '../utils/mirror';
+import mirrorKeys from 'mirror-keys';
 
-export const types = mirror('Home', {
+export const types = mirrorKeys('Home', {
   Init: undefined,
 
   SetSelectedBoards: undefined,
