@@ -7,6 +7,8 @@ import * as React from 'react';
 import * as Select from 'react-select';
 import * as actions from '../../actions/home';
 
+import OrganizationSelect from './OrganizationSelect';
+import RefreshButton from './RefreshButton';
 import { RootState } from '../../reducers/index';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
@@ -118,20 +120,16 @@ export default class Home extends React.Component<Home.Props, Home.State> {
         <div className="filters">
           <div className="row">
             <div className="col-12 col-sm-6 form-inline">
-              <select className="form-control mr-2"
-                disabled={ this.props.organizationsLoading || this.props.boardsLoading }
-                onChange={ (e) => this.onOrganizationChange(e) }>
-                <option value="">{ this.props.organizationsLoading ? 'Loading...' : 'Select organization...' }</option>
-                { this.props.organizations.map(org =>
-                  <option key={ org.id } value={ org.id }>{ org.displayName }</option>
-                ) }
-              </select>
-              <button className="btn btn-primary mr-2" onClick={ () => this.refreshBoards() }>
-                <i className="fa fa-refresh" aria-hidden="true"></i>
-              </button>
-              { this.props.boardsLoading &&
-                <i className="fa fa-spinner fa-spin ml-2"></i>
-              }
+              <OrganizationSelect
+                organizations={ this.props.organizations }
+                loading={ this.props.organizationsLoading || this.props.boardsLoading }
+                onOrganizationChange= { this.onOrganizationChange.bind(this) }
+              />
+
+              <RefreshButton
+                loading={ this.props.boardsLoading }
+                refresh={ this.refreshBoards.bind(this) }
+              />
             </div>
           </div>
 
