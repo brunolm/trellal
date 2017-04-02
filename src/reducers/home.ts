@@ -15,18 +15,18 @@ interface List {
 }
 
 const InitialState = {
-  title: 'TypeScript rocks!',
   boards: [] as Board[],
-  filteredBoards: [],
-  filteredBoardLists: [] as List[],
-  filteredLists: [] as { value: any; label: any; }[],
-  organizations: [],
-  selectedOrgId: undefined,
-  error: undefined,
   boardsLoading: false,
+  error: undefined,
+  filteredBoardLists: [] as List[],
+  filteredBoards: [],
+  filteredLists: [] as Array<{ value: any; label: any; }>,
+  organizations: [],
   organizationsLoading: false,
   selectedBoards: [],
   selectedLists: [],
+  selectedOrgId: undefined,
+  title: 'TypeScript rocks!',
 };
 
 const home = (state = InitialState, action) => {
@@ -105,8 +105,8 @@ const home = (state = InitialState, action) => {
     case types.GetOrganizationsError:
       return {
         ...state,
-        organizations: [],
         error: true,
+        organizations: [],
         organizationsLoading: false,
       };
 
@@ -146,8 +146,8 @@ const home = (state = InitialState, action) => {
       return {
         ...state,
         boards: [],
-        error: true,
         boardsLoading: false,
+        error: true,
         selectedBoards: [],
         selectedLists: [],
       };

@@ -7,11 +7,9 @@ export namespace OrganizationSelect {
 
     onOrganizationChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   }
-
-  export interface State { }
 }
 
-export default class OrganizationSelect extends React.Component<OrganizationSelect.Props, OrganizationSelect.State> {
+export default class OrganizationSelect extends React.Component<OrganizationSelect.Props, { }> {
   render() {
     return (
       <select className="form-control mr-2"

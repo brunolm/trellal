@@ -2,7 +2,7 @@ import './index.scss';
 
 import * as React from 'react';
 
-import { Link, Route, Router, Switch } from 'react-router-dom';
+import { Route, Router, Switch } from 'react-router-dom';
 import { applyMiddleware, createStore } from 'redux';
 
 import Home from './components/Home';

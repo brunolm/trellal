@@ -9,7 +9,8 @@
     "build:app": "webpack --config webpack.config.js",
     "build:vendor": "webpack --config webpack.config.vendor.js",
     "clean": "rimraf dist",
-    "test": "mocha dist/spec"
+    "test": "npm run lint && mocha dist/spec",
+    "lint": "tslint src/**/*.ts{,x}"
   },
   "repository": {
     "type": "git",

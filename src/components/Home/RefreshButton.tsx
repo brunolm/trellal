@@ -6,11 +6,9 @@ export namespace RefreshButton {
 
     refresh: (e: React.MouseEvent<HTMLButtonElement>) => void;
   }
-
-  export interface State { }
 }
 
-export default class OrganizationSelect extends React.Component<RefreshButton.Props, RefreshButton.State> {
+export default class OrganizationSelect extends React.Component<RefreshButton.Props, { }> {
   render() {
     return (
       <span>

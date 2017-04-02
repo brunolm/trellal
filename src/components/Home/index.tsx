@@ -172,7 +172,8 @@ export default class Home extends React.Component<Home.Props, Home.State> {
                           { card.name }
                           <div className="members">
                             { board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
-                              <img key={ member.id } alt={ member.initials } title={ member.fullName } src={ `http://trello-avatars.s3.amazonaws.com/${member.avatarHash}/30.png` } />
+                              <img key={ member.id } alt={ member.initials } title={ member.fullName }
+                                src={ `http://trello-avatars.s3.amazonaws.com/${member.avatarHash}/30.png` } />
                             ) }
                           </div>
                         </li>
