@@ -16,9 +16,11 @@ export default class OrganizationSelect extends React.Component<OrganizationSele
         disabled={ this.props.loading }
         onChange={ (e) => this.props.onOrganizationChange(e) }>
         <option value="">{ this.props.loading ? 'Loading...' : 'Select organization...' }</option>
-        { this.props.organizations.map(org =>
-          <option key={ org.id } value={ org.id }>{ org.displayName }</option>
-        ) }
+        {
+          this.props.organizations.map(org =>
+            <option key={ org.id } value={ org.id }>{ org.displayName }</option>
+          )
+        }
       </select>
     );
   }

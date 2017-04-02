@@ -113,15 +113,17 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
         </div>
 
         <div className="dropdown-menu" style={ { display: this.state.hidden ? 'none' : 'block' } }>
-          { this.search().map(item =>
-            <button key={ item.value } className="dropdown-item" tabIndex={ 0 } onClick={ () => this.onChange(item) }>
-              <input type="checkbox" className="form-check-input ml-0 mr-2" tabIndex={ -1 }
-                onChange={ Number }
-                checked={ this.props.selectedItems.some(si => si.value === item.value) }
-              />
-              { item.label }
-            </button>
-          ) }
+          {
+            this.search().map(item =>
+              <button key={ item.value } className="dropdown-item" tabIndex={ 0 } onClick={ () => this.onChange(item) }>
+                <input type="checkbox" className="form-check-input ml-0 mr-2" tabIndex={ -1 }
+                  onChange={ Number }
+                  checked={ this.props.selectedItems.some(si => si.value === item.value) }
+                />
+                { item.label }
+              </button>
+            )
+          }
           { noItems }
         </div>
       </div>

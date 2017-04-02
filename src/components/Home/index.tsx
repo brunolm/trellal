@@ -157,35 +157,43 @@ export default class Home extends React.Component<Home.Props, Home.State> {
         </div>
 
         <div>
-          { this.props.filteredBoards.map(board =>
-            <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
-              <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
-              <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
+          {
+            this.props.filteredBoards.map(board =>
+              <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
+                <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
+                <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
 
-                { board.lists.filter(list => this.props.filteredLists.map(fl => fl.id).indexOf(list.id) !== -1).map(list =>
-                  <div key={ list.id } className="list">
-                    <span>{ list.name }</span>
+                  {
+                    board.lists.filter(list => this.props.filteredLists.map(fl => fl.id).indexOf(list.id) !== -1).map(list =>
+                      <div key={ list.id } className="list">
+                        <span>{ list.name }</span>
 
-                    <ul className="card-container">
-                      { list.cards.map(card =>
-                        <li key={ card.id } className="card">
-                          { card.name }
-                          <div className="members">
-                            { board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
-                              <img key={ member.id } alt={ member.initials } title={ member.fullName }
-                                src={ `http://trello-avatars.s3.amazonaws.com/${member.avatarHash}/30.png` } />
-                            ) }
-                          </div>
-                        </li>
-                      ) }
-                    </ul>
+                        <ul className="card-container">
+                          {
+                            list.cards.map(card =>
+                              <li key={ card.id } className="card">
+                                { card.name }
+                                <div className="members">
+                                  {
+                                    board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
+                                      <img key={ member.id } alt={ member.initials } title={ member.fullName }
+                                        src={ `http://trello-avatars.s3.amazonaws.com/${member.avatarHash}/30.png` } />
+                                    )
+                                  }
+                                </div>
+                              </li>
+                            )
+                          }
+                        </ul>
 
-                  </div>
-                ) }
+                      </div>
+                    )
+                  }
 
+                </div>
               </div>
-            </div>
-          ) }
+            )
+          }
         </div>
       </div>
     );
