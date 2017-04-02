@@ -109,11 +109,9 @@ export default class Home extends React.Component<Home.Props, Home.State> {
   }
 
   onSelectBoards(e) {
-    console.log('onSelectBoards', e);
     this.props.dispatch(actions.setSelectedBoards(e));
   }
   onSelectLists(e) {
-    console.log('onSelectLists', e);
     this.props.dispatch(actions.setSelectedLists(e));
   }
 
