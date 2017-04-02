@@ -30,7 +30,7 @@ render(
       </main>
     </Router>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 declare var module: any;

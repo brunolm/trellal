@@ -121,7 +121,7 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
                   checked={ this.props.selectedItems.some(si => si.value === item.value) }
                 />
                 { item.label }
-              </button>
+              </button>,
             )
           }
           { noItems }

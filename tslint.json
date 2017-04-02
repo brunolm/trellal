@@ -29,9 +29,6 @@
     "ordered-imports": [
       false
     ],
-    "trailing-comma": [
-      true
-    ],
     "quotemark": [
       true,
       "single",

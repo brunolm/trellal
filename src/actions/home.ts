@@ -42,7 +42,7 @@ export function getOrganizations(token) {
       },
       error() {
         return dispatch({ type: types.GetOrganizationsError, error: true });
-      }
+      },
     });
   };
 }
@@ -65,7 +65,7 @@ export function getBoardsByOrg(token, orgId) {
       },
       error() {
         return dispatch({ type: types.GetOrganizationBoardError, error: true });
-      }
+      },
     });
   };
 }

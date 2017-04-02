@@ -18,7 +18,7 @@ export default class OrganizationSelect extends React.Component<OrganizationSele
         <option value="">{ this.props.loading ? 'Loading...' : 'Select organization...' }</option>
         {
           this.props.organizations.map(org =>
-            <option key={ org.id } value={ org.id }>{ org.displayName }</option>
+            <option key={ org.id } value={ org.id }>{ org.displayName }</option>,
           )
         }
       </select>
