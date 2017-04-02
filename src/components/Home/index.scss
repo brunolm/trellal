@@ -1,5 +1,6 @@
-$bg-list: #E2E4E6;
-$bg-card: #fff;
+@import '~bootstrap/scss/_variables.scss'; // sass-lint:disable-line clean-import-paths
+$bg-list: #e2e4e6;
+$bg-card: $white;
 
 body {
   .filters {
@@ -14,7 +15,7 @@ body {
     white-space: nowrap;
 
     h2 {
-      color: #fff;
+      color: $white;
     }
   }
 
@@ -46,8 +47,10 @@ body {
     padding: 10px;
 
     .members {
-      img:not(:last-child) {
-        margin-right: 4px;
+      img {
+        &:not(:last-child) {
+          margin-right: 4px;
+        }
       }
     }
   }

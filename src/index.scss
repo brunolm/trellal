@@ -1,7 +1,10 @@
-@import '~bootstrap/scss/_variables.scss';
+@import '~bootstrap/scss/_variables.scss'; // sass-lint:disable-line clean-import-paths
+$bg-inverse-border-color: #c9cbcc;
 
 body {
-  .bg-inverse input {
-    border-color: #c9cbcc;
+  .bg-inverse {
+    input {
+      border-color: $bg-inverse-border-color;
+    }
   }
 }
