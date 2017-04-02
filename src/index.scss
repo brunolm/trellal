@@ -1,11 +1,7 @@
+@import '~bootstrap/scss/_variables.scss';
+
 body {
-  .Select--multi {
-    .Select-value-icon {
-      padding: 4px 8px 6px;
-    }
-    .Select-value {
-      background: #0275d8;
-      color: #fff;
-    }
+  .bg-inverse input {
+    border-color: #c9cbcc;
   }
 }

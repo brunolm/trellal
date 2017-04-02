@@ -4,8 +4,9 @@ import 'bootstrap';
 
 import * as $ from 'jquery';
 import * as React from 'react';
-import * as Select from 'react-select';
 import * as actions from '../../actions/home';
+
+import MultiSelect, { MultiSelectComponent } from '../Shared/MultiSelect';
 
 import OrganizationSelect from './OrganizationSelect';
 import RefreshButton from './RefreshButton';
@@ -19,14 +20,23 @@ import parseUri from 'uri-sharp';
 export namespace Home {
   export interface Props extends RouteComponentProps<void> {
     title: string;
-    boards: any[];
+
     organizations: any[];
     selectedOrgId: string;
-    dispatch: any;
+
+    boards: any[];
+    filteredBoards: any[];
+
+    filteredBoardLists: any[];
+    filteredLists: any[];
+
     boardsLoading: boolean;
     organizationsLoading: boolean;
-    selectedBoards: any[];
+
+    selectedBoards: MultiSelectComponent.SelectOption[];
     selectedLists: any[];
+
+    dispatch: any;
   }
 
   export interface State {
@@ -99,31 +109,24 @@ export default class Home extends React.Component<Home.Props, Home.State> {
   }
 
   onSelectBoards(e) {
+    console.log('onSelectBoards', e);
     this.props.dispatch(actions.setSelectedBoards(e));
   }
   onSelectLists(e) {
+    console.log('onSelectLists', e);
     this.props.dispatch(actions.setSelectedLists(e));
   }
 
   render() {
-    const filteredBoards = this.props.boards.filter(board => this.props.selectedBoards.map(sb => sb.value).indexOf(board.id) !== -1);
-    const filteredBoardLists = this.props.boards
-      .map(board => board.lists || [])
-      .reduce((a, next) => a.concat(next), [])
-      .sort((a, b) => a.name.localeCompare(b.name));
-
-    const filteredLists = filteredBoardLists.filter(list => this.props.selectedLists.map(sl => sl.value).indexOf(list.id) !== -1)
-      .sort((a, b) => a.name.localeCompare(b.name));
-
     return (
       <div>
-        <div className="filters">
+        <div className="filters bg-inverse text-white">
           <div className="row">
             <div className="col-12 col-sm-6 form-inline">
               <OrganizationSelect
                 organizations={ this.props.organizations }
                 loading={ this.props.organizationsLoading || this.props.boardsLoading }
-                onOrganizationChange= { this.onOrganizationChange.bind(this) }
+                onOrganizationChange={ this.onOrganizationChange.bind(this) }
               />
 
               <RefreshButton
@@ -135,47 +138,36 @@ export default class Home extends React.Component<Home.Props, Home.State> {
 
           { this.props.selectedOrgId && !!this.props.boards.length &&
             <div>
-              Boards
-
               <div className="row">
-                <div className="col-12">
-                  <Select
-                    options={ this.props.boards.map(board => ({ value: board.id, label: board.name })) }
-                    multi
-                    value={ this.props.selectedBoards }
-                    onChange={ (e) => this.onSelectBoards(e) }
-                  />
+                <div className="col-12 col-sm-4 col-xl-3">
+                  <MultiSelect
+                    items={ this.props.boards.map(board => ({ value: board.id, label: board.name })) }
+                    label="Boards"
+                    selectedItems={ this.props.selectedBoards }
+                    onChange={ e => this.onSelectBoards(e) } />
                 </div>
-              </div>
-            </div>
-          }
-
-
-          { this.props.selectedOrgId && !!this.props.boards.length &&
-            <div>
-              Lists
-
-              <div className="row">
-                <div className="col-12">
-                  <Select
-                    options={ filteredBoardLists.map(list => ({ value: list.id, label: list.name })) }
-                    multi
-                    value={ this.props.selectedLists }
-                    onChange={ (e) => this.onSelectLists(e) }
-                  />
+                <div className="col-12 col-sm-4 col-xl-3">
+                  <MultiSelect
+                    items={ this.props.filteredBoardLists.map(board => ({ value: board.id, label: board.name })) }
+                    label="Lists"
+                    selectedItems={ this.props.selectedLists }
+                    onChange={ e => this.onSelectLists(e) } />
                 </div>
               </div>
             </div>
           }
         </div>
+
         <div>
-          { filteredBoards.map(board =>
+          { this.props.filteredBoards.map(board =>
             <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
               <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
               <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
-                { board.lists.filter(list => filteredLists.map(fl => fl.id).indexOf(list.id) !== -1).map(list =>
+
+                { board.lists.filter(list => this.props.filteredLists.map(fl => fl.id).indexOf(list.id) !== -1).map(list =>
                   <div key={ list.id } className="list">
                     <span>{ list.name }</span>
+
                     <ul className="card-container">
                       { list.cards.map(card =>
                         <li key={ card.id } className="card">
@@ -188,8 +180,10 @@ export default class Home extends React.Component<Home.Props, Home.State> {
                         </li>
                       ) }
                     </ul>
+
                   </div>
                 ) }
+
               </div>
             </div>
           ) }
