@@ -100,18 +100,18 @@ export default class Home extends React.Component<Home.Props, Home.State> {
     });
   }
 
-  onOrganizationChange(e) {
+  onOrganizationChange = e => {
     this.props.dispatch(actions.getBoardsByOrg(this.token, e.target.value));
   }
 
-  refreshBoards() {
+  refreshBoards = () => {
     this.props.dispatch(actions.getBoardsByOrg(this.token, this.props.selectedOrgId));
   }
 
-  onSelectBoards(e) {
+  onSelectBoards = e => {
     this.props.dispatch(actions.setSelectedBoards(e));
   }
-  onSelectLists(e) {
+  onSelectLists = e => {
     this.props.dispatch(actions.setSelectedLists(e));
   }
 
@@ -124,12 +124,12 @@ export default class Home extends React.Component<Home.Props, Home.State> {
               <OrganizationSelect
                 organizations={ this.props.organizations }
                 loading={ this.props.organizationsLoading || this.props.boardsLoading }
-                onOrganizationChange={ this.onOrganizationChange.bind(this) }
+                onOrganizationChange={ this.onOrganizationChange }
               />
 
               <RefreshButton
                 loading={ this.props.boardsLoading }
-                refresh={ this.refreshBoards.bind(this) }
+                refresh={ this.refreshBoards }
               />
             </div>
           </div>
@@ -142,14 +142,14 @@ export default class Home extends React.Component<Home.Props, Home.State> {
                     items={ this.props.boards.map(board => ({ value: board.id, label: board.name })) }
                     label="Boards"
                     selectedItems={ this.props.selectedBoards }
-                    onChange={ e => this.onSelectBoards(e) } />
+                    onChange={ this.onSelectBoards } />
                 </div>
                 <div className="col-12 col-sm-4 col-xl-3">
                   <MultiSelect
                     items={ this.props.filteredBoardLists.map(board => ({ value: board.id, label: board.name })) }
                     label="Lists"
                     selectedItems={ this.props.selectedLists }
-                    onChange={ e => this.onSelectLists(e) } />
+                    onChange={ this.onSelectLists } />
                 </div>
               </div>
             </div>

@@ -31,7 +31,7 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
     };
   }
 
-  onChange(item: MultiSelectComponent.SelectOption) {
+  onChange = (item: MultiSelectComponent.SelectOption) => {
     const selectedItems = [ ...this.props.selectedItems ];
 
     const index = selectedItems.findIndex(element => element.value === item.value);
@@ -114,7 +114,7 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
 
         <div className="dropdown-menu" style={ { display: this.state.hidden ? 'none' : 'block' } }>
           { this.search().map(item =>
-            <button key={ item.value } className="dropdown-item" tabIndex={ 0 } onClick={ this.onChange.bind(this, item) }>
+            <button key={ item.value } className="dropdown-item" tabIndex={ 0 } onClick={ () => this.onChange(item) }>
               <input type="checkbox" className="form-check-input ml-0 mr-2" tabIndex={ -1 }
                 onChange={ () => { } }
                 checked={ this.props.selectedItems.some(si => si.value === item.value) }
