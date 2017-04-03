@@ -1,5 +1,6 @@
 import { Action } from '../base-reducer';
 import { InitialState } from './base-reducer';
+import { action as baseAction } from '../../actions/home/base-action';
 import { default as getBoardsByOrg } from './get-boards-by-org';
 import { default as getOrganizations } from './get-organizations';
 import { default as init } from './init';
@@ -21,7 +22,7 @@ const reducer = {
 } as { [key: string]: (state: typeof InitialState, action: Action) => any; };
 
 export const home = (state = InitialState, action) => {
-  if (action.namespace !== 'Home') {
+  if (action.namespace !== baseAction.namespace) {
     return state;
   }
 
