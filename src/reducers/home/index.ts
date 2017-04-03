@@ -21,7 +21,6 @@ const reducer = {
 } as { [key: string]: (state: typeof InitialState, action: Action) => any; };
 
 export const home = (state = InitialState, action) => {
-  console.log(action);
   if (action.namespace !== 'Home') {
     return state;
   }
