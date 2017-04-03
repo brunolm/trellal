@@ -131,6 +131,7 @@ export default class Home extends React.Component<Home.Props, Home.State> {
                 loading={ this.props.boardsLoading }
                 refresh={ this.refreshBoards }
               />
+              { this.props.selectedOrgId }
             </div>
           </div>
 
