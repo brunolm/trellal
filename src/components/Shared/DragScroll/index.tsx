@@ -65,7 +65,7 @@ export default class DragScroll extends React.Component<{ }, DragScrollComponent
   render() {
     return (
       <div className="_drag-scroll"
-        style={ { 'user-select': 'none' } }
+        style={ { userSelect: 'none' } }
         onMouseDown={ this.onMouseDown } onMouseMove={ this.onMouseMove } onMouseUp={ this.onMouseUp }
       >
         { this.props.children }

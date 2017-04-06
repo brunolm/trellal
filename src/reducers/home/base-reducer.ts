@@ -14,6 +14,7 @@ export const InitialState = {
   boards: [] as Board[],
   boardsLoading: false,
   error: undefined,
+  filterMyCards: false,
   filteredBoardLists: [] as List[],
   filteredBoards: [],
   filteredLists: [] as Array<{ value: any; label: any; }>,
@@ -22,4 +23,6 @@ export const InitialState = {
   selectedBoards: [],
   selectedLists: [],
   selectedOrgId: undefined,
+  user: undefined,
+  userLoading: false,
 };

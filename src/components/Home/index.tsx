@@ -31,11 +31,15 @@ export namespace Home {
     filteredBoardLists: any[];
     filteredLists: any[];
 
+    filterMyCards: boolean;
+
     boardsLoading: boolean;
     organizationsLoading: boolean;
 
     selectedBoards: MultiSelectComponent.SelectOption[];
     selectedLists: any[];
+
+    user: any;
 
     dispatch: any;
   }
@@ -54,6 +58,7 @@ const mapStateToProps = (state: RootState) => {
 @(connect as any)(mapStateToProps)
 export default class Home extends React.Component<Home.Props, Home.State> {
   static tokenSettingKey = 'token';
+  static userSettingKey = 'user';
 
   constructor(props) {
     super(props);
@@ -73,7 +78,29 @@ export default class Home extends React.Component<Home.Props, Home.State> {
 
     if (this.token) {
       this.props.dispatch(actions.getOrganizations(this.token));
+
+      if (!this.user) {
+        this.props.dispatch(actions.getUser(this.token));
+      }
     }
+  }
+
+  filterMyCards = e => {
+    if (/q/i.test(e.key)) {
+      this.props.dispatch(actions.toggleUser(this.token));
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.filterMyCards);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.filterMyCards);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.user = nextProps.user;
   }
 
   get token() {
@@ -82,6 +109,17 @@ export default class Home extends React.Component<Home.Props, Home.State> {
 
   set token(value) {
     localStorage.setItem(Home.tokenSettingKey, value);
+  }
+
+  get user() {
+    const value = localStorage.getItem(Home.userSettingKey);
+    return value ? JSON.parse(value) : undefined;
+  }
+
+  set user(value) {
+    if (value) {
+      localStorage.setItem(Home.userSettingKey, JSON.stringify(value));
+    }
   }
 
   hideBoard(boardId) {
@@ -160,8 +198,8 @@ export default class Home extends React.Component<Home.Props, Home.State> {
         <div>
           {
             this.props.filteredBoards.map(board =>
-              <DragScroll>
-                <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
+              <DragScroll key={ board.id }>
+                <div className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
                   <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
                   <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
 
@@ -172,7 +210,9 @@ export default class Home extends React.Component<Home.Props, Home.State> {
 
                           <ul className="card-container">
                             {
-                              list.cards.map(card =>
+                              list.cards
+                                .filter(card => !this.user || !this.props.filterMyCards || (this.props.filterMyCards && card.idMembers.indexOf(this.user.id) !== -1))
+                                .map(card =>
                                 <li key={ card.id } className="card-item">
                                   <div>
                                     {

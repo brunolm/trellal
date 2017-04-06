@@ -3,9 +3,11 @@ import { InitialState } from './base-reducer';
 import { action as baseAction } from '../../actions/home/base-action';
 import { default as getBoardsByOrg } from './get-boards-by-org';
 import { default as getOrganizations } from './get-organizations';
+import { default as getUser } from './get-user';
 import { default as init } from './init';
 import { default as setSelectedBoards } from './set-selected-boards';
 import { default as setSelectedLists } from './set-selected-lists';
+import { default as toggleUser } from './toggle-user';
 import { types } from '../../actions/home';
 
 const reducer = {
@@ -15,10 +17,14 @@ const reducer = {
   [types.GetOrganizationsError]: getOrganizations,
   [types.GetOrganizationsStart]: getOrganizations,
   [types.GetOrganizationsSuccess]: getOrganizations,
+  [types.GetUserError]: getUser,
+  [types.GetUserStart]: getUser,
+  [types.GetUserSuccess]: getUser,
   [types.Init]: init,
   [types.SelectOrganization]: getBoardsByOrg,
   [types.SetSelectedBoards]: setSelectedBoards,
   [types.SetSelectedLists]: setSelectedLists,
+  [types.ToggleUser]: toggleUser,
 } as { [key: string]: (state: typeof InitialState, action: Action) => any; };
 
 export const home = (state = InitialState, action) => {

@@ -14,11 +14,17 @@ export default function trello(token) {
     getBoards: async () => await getBoards(req, keys),
     getOrganizationBoards: async (orgId) => await getOrganizationBoards(req, keys, orgId),
     getOrganizations: async () => await getOrganizations(req, keys),
+    getUser: async (id?) => await getUser(req, keys, id || 'me'),
   };
 }
 
 function getQuery(keys, params?) {
   return qs.stringify({ ...keys, ...params });
+}
+
+async function getUser(req, keys, id) {
+  const { data } = await req.get(`/members/${id}?${getQuery(keys)}`);
+  return data;
 }
 
 async function getBoards(req, keys) {
