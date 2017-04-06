@@ -40,13 +40,73 @@ body {
     padding: 0;
   }
 
-  .card {
+  .card-item {
     background: $bg-card;
     border-radius: 6px;
     font-size: 90%;
+    margin: 0 0 6px;
     padding: 10px;
 
-    .members {
+    .card-label {
+      border-radius: 3px;
+      color: $white;
+      display: inline-block;
+      font-size: 90%;
+      margin: 3px 3px 0 0;
+      max-width: 100%;
+      overflow: hidden;
+      padding: 1px 5px;
+      text-overflow: ellipsis;
+      text-shadow: 0 0 5px rgba(0,0,0,.2), 0 0 2px #000;
+      white-space: nowrap;
+
+      &:after {
+        content: '.';
+        visibility: hidden;
+      }
+    }
+
+    .card-label-green {
+      background-color: #61BD4F;
+    }
+
+    .card-label-yellow {
+      background-color: #F2D600;
+    }
+
+    .card-label-orange {
+      background-color: #FFAB4A;
+    }
+
+    .card-label-red {
+      background-color: #EB5A46;
+    }
+
+    .card-label-purple {
+      background-color: #C377E0;
+    }
+
+    .card-label-blue {
+      background-color: #0079BF;
+    }
+
+    .card-label-sky {
+      background-color: #00C2E0;
+    }
+
+    .card-label-lime {
+      background-color: #51E898;
+    }
+
+    .card-label-pink {
+      background-color: #FF80CE;
+    }
+
+    .card-label-black {
+      background-color: #4d4d4d;
+    }
+
+    .card-members {
       img {
         &:not(:last-child) {
           margin-right: 4px;
