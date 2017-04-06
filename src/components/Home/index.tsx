@@ -8,6 +8,7 @@ import * as actions from '../../actions/home';
 
 import MultiSelect, { MultiSelectComponent } from '../Shared/MultiSelect';
 
+import DragScroll from '../Shared/DragScroll';
 import OrganizationSelect from './OrganizationSelect';
 import RefreshButton from './RefreshButton';
 import { RootState } from '../../reducers/index';
@@ -159,46 +160,48 @@ export default class Home extends React.Component<Home.Props, Home.State> {
         <div>
           {
             this.props.filteredBoards.map(board =>
-              <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
-                <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
-                <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
+              <DragScroll>
+                <div key={ board.id } className="board" data-id={ board.id } style={ { background: board.prefs.backgroundColor } }>
+                  <h2 onClick={ () => this.hideBoard(board.id) } className="board-name">{ board.name }</h2>
+                  <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(board.id) !== -1 }>
 
-                  {
-                    board.lists.filter(list => this.props.filteredLists.map(fl => fl.id).indexOf(list.id) !== -1).map(list =>
-                      <div key={ list.id } className="list">
-                        <strong>{ list.name }</strong>
+                    {
+                      board.lists.filter(list => this.props.filteredLists.map(fl => fl.id).indexOf(list.id) !== -1).map(list =>
+                        <div key={ list.id } className="list">
+                          <strong>{ list.name }</strong>
 
-                        <ul className="card-container">
-                          {
-                            list.cards.map(card =>
-                              <li key={ card.id } className="card-item">
-                                <div>
-                                  {
-                                    card.labels.map(label =>
-                                      <span key={ label.id } className={ `card-label card-label-${label.color}` }>{ label.name || ' ' }</span>,
-                                    )
-                                  }
-                                </div>
-                                { card.name }
-                                <div className="card-members">
-                                  {
-                                    board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
-                                      <img key={ member.id } alt={ member.initials } title={ member.fullName }
-                                        src={ `http://trello-avatars.s3.amazonaws.com/${member.avatarHash}/30.png` } />,
-                                    )
-                                  }
-                                </div>
-                              </li>,
-                            )
-                          }
-                        </ul>
+                          <ul className="card-container">
+                            {
+                              list.cards.map(card =>
+                                <li key={ card.id } className="card-item">
+                                  <div>
+                                    {
+                                      card.labels.map(label =>
+                                        <span key={ label.id } className={ `card-label card-label-${label.color}` }>{ label.name || ' ' }</span>,
+                                      )
+                                    }
+                                  </div>
+                                  { card.name }
+                                  <div className="card-members">
+                                    {
+                                      board.members.filter(bm => card.idMembers.indexOf(bm.id) !== -1).map(member =>
+                                        <img key={ member.id } alt={ member.initials } title={ member.fullName }
+                                          src={ `http://trello-avatars.s3.amazonaws.com/${member.avatarHash}/30.png` } />,
+                                      )
+                                    }
+                                  </div>
+                                </li>,
+                              )
+                            }
+                          </ul>
 
-                      </div>,
-                    )
-                  }
+                        </div>,
+                      )
+                    }
 
+                  </div>
                 </div>
-              </div>,
+              </DragScroll>,
             )
           }
         </div>
