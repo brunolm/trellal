@@ -2,6 +2,19 @@
 $bg-list: #e2e4e6;
 $bg-card: $white;
 
+$label-shadow: rgba(0, 0, 0, .2);
+
+$label-color-green: #61bd4f;
+$label-color-yellow: #f2d600;
+$label-color-orange: #ffab4a;
+$label-color-red: #eb5a46;
+$label-color-purple: #c377e0;
+$label-color-blue: #0079bf;
+$label-color-sky: #00c2e0;
+$label-color-lime: #51e898;
+$label-color-pink: #ff80ce;
+$label-color-black: #4d4d4d;
+
 body {
   .filters {
     padding: 20px;
@@ -57,53 +70,53 @@ body {
       overflow: hidden;
       padding: 1px 5px;
       text-overflow: ellipsis;
-      text-shadow: 0 0 5px rgba(0,0,0,.2), 0 0 2px #000;
+      text-shadow: 0 0 5px $label-shadow, 0 0 2px $black;
       white-space: nowrap;
 
-      &:after {
+      &::after {
         content: '.';
         visibility: hidden;
       }
     }
 
     .card-label-green {
-      background-color: #61BD4F;
+      background-color: $label-color-green;
     }
 
     .card-label-yellow {
-      background-color: #F2D600;
+      background-color: $label-color-yellow;
     }
 
     .card-label-orange {
-      background-color: #FFAB4A;
+      background-color: $label-color-orange;
     }
 
     .card-label-red {
-      background-color: #EB5A46;
+      background-color: $label-color-red;
     }
 
     .card-label-purple {
-      background-color: #C377E0;
+      background-color: $label-color-purple;
     }
 
     .card-label-blue {
-      background-color: #0079BF;
+      background-color: $label-color-blue;
     }
 
     .card-label-sky {
-      background-color: #00C2E0;
+      background-color: $label-color-sky;
     }
 
     .card-label-lime {
-      background-color: #51E898;
+      background-color: $label-color-lime;
     }
 
     .card-label-pink {
-      background-color: #FF80CE;
+      background-color: $label-color-pink;
     }
 
     .card-label-black {
-      background-color: #4d4d4d;
+      background-color: $label-color-black;
     }
 
     .card-members {

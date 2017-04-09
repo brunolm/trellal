@@ -9,7 +9,7 @@ export const types = mirrorKeys(undefined, {
 });
 
 export function getBoardsByOrg(token, orgId) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ ...action, type: types.GetOrganizationBoardStart });
 
     if (!orgId) {

@@ -8,7 +8,7 @@ export const types = mirrorKeys(undefined, {
 });
 
 export function getOrganizations(token) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ ...action, type: types.GetOrganizationsStart });
     $.ajax({
       data: { token },

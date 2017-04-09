@@ -3,7 +3,6 @@
     "tslint:latest"
   ],
   "rules": {
-    "arrow-parens": false,
     "interface-name": [
       false
     ],

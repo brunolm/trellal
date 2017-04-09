@@ -29,7 +29,7 @@ export default class DragScroll extends React.Component<{ }, DragScrollComponent
     return $(e.target).closest('._drag-scroll').find(':first').get(0);
   }
 
-  onMouseDown = e => {
+  onMouseDown = (e) => {
     const element = this.getElement(e);
 
     if (!element) {
@@ -46,7 +46,7 @@ export default class DragScroll extends React.Component<{ }, DragScrollComponent
     });
   }
 
-  onMouseMove = e => {
+  onMouseMove = (e) => {
     if (this.state.clicking) {
       const moveX = this.state.initialX - e.pageX;
       const moveY = this.state.initialY - e.pageY;
@@ -56,7 +56,7 @@ export default class DragScroll extends React.Component<{ }, DragScrollComponent
     }
   }
 
-  onMouseUp = e => {
+  onMouseUp = (e) => {
     this.setState({
       clicking: false,
     });

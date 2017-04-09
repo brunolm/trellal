@@ -5,7 +5,6 @@ import { wrap } from './wrap';
 
 const router = express.Router();
 
-
 router.get('/get-user', wrap(async (req, res) => {
   const trello = Trello(req.query.token);
 

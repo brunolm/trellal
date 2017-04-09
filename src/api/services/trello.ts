@@ -51,7 +51,7 @@ async function getOrganizationBoards(req, keys, orgId) {
 }
 
 async function getBoardLists(req, keys, boardId) {
-  const { data } = await req.get(`/boards/${boardId}/lists?cards=open&fields=name,pos&filter=open&${getQuery(keys)}`);
+  const { data } = await req.get(`/boards/${boardId}/lists?cards=open&fields=name&card_fields=idMembers,idShort,labels,name,shortUrl&filter=open&${getQuery(keys)}`);
   return data;
 }
 

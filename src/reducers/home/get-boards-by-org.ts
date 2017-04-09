@@ -16,7 +16,7 @@ export default function getBoardsByOrg(state: typeof InitialState, action: Actio
       const boards = clone(action.data);
       const filteredBoards = clone(action.data);
       const filteredBoardLists = clone(filteredBoards)
-        .map(board => board.lists || [])
+        .map((board) => board.lists || [])
         .reduce((a, next) => a.concat(next), [])
         .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -33,9 +33,9 @@ export default function getBoardsByOrg(state: typeof InitialState, action: Actio
 
         boardsLoading: false,
 
-        selectedBoards: clone(boards).map(board => ({ value: board.id, label: board.name })),
+        selectedBoards: clone(boards).map((board) => ({ value: board.id, label: board.name })),
         selectedLists: clone(filteredLists)
-          .map(list => ({ value: list.id, label: list.name }))
+          .map((list) => ({ value: list.id, label: list.name }))
           .sort((a, b) => a.label.localeCompare(b.label)),
       };
     }

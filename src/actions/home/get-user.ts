@@ -8,7 +8,7 @@ export const types = mirrorKeys(undefined, {
 });
 
 export function getUser(token) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ ...action, type: types.GetUserStart });
 
     $.ajax({

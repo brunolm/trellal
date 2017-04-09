@@ -34,7 +34,7 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
   onChange = (item: MultiSelectComponent.SelectOption) => {
     const selectedItems = [ ...this.props.selectedItems ];
 
-    const index = selectedItems.findIndex(element => element.value === item.value);
+    const index = selectedItems.findIndex((element) => element.value === item.value);
 
     if (index !== -1) {
       selectedItems.splice(index, 1);
@@ -55,7 +55,7 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
   search() {
     return !this.state.search
       ? this.props.items
-      : fuzzy.filter(this.state.search, this.props.items, { extract: e => e.label }).map(e => e.original);
+      : fuzzy.filter(this.state.search, this.props.items, { extract: (e) => e.label }).map((e) => e.original);
   }
 
   toggle() {
@@ -64,9 +64,9 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
     });
   }
 
-  resetSearch = e => this.setState({ search: '' });
+  resetSearch = (e) => this.setState({ search: '' });
 
-  show = e => this.setState({ hidden: false });
+  show = (e) => this.setState({ hidden: false });
   hide = (e) => {
     let node = e.target;
 
@@ -99,13 +99,13 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
       <div className="dropdown">
         <div>
           <label data-toggle="tooltip" data-placement="bottom"
-            title={ this.props.selectedItems.map(item => item.label).join(', ') }>{ selectText }</label>
+            title={ this.props.selectedItems.map((item) => item.label).join(', ') }>{ selectText }</label>
 
           <div className="input-group">
             <input type="search" className="dropdown-toggle form-control" placeholder="Select..."
               value={ this.state.search }
               onFocus={ this.show }
-              onChange={ e => this.onSearchChange(e) }
+              onChange={ (e) => this.onSearchChange(e) }
             />
 
             <button className="input-group-addon btn btn-secondary" onClick={ this.resetSearch } tabIndex={ -1 }><i className="fa fa-close" aria-hidden="true"></i></button>
@@ -114,11 +114,11 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
 
         <div className="dropdown-menu" style={ { display: this.state.hidden ? 'none' : 'block' } }>
           {
-            this.search().map(item =>
+            this.search().map((item) =>
               <button key={ item.value } className="dropdown-item" tabIndex={ 0 } onClick={ () => this.onChange(item) }>
                 <input type="checkbox" className="form-check-input ml-0 mr-2" tabIndex={ -1 }
                   onChange={ Number }
-                  checked={ this.props.selectedItems.some(si => si.value === item.value) }
+                  checked={ this.props.selectedItems.some((si) => si.value === item.value) }
                 />
                 { item.label }
               </button>,
