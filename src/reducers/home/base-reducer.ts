@@ -23,6 +23,7 @@ export const InitialState = {
   selectedBoards: [],
   selectedLists: [],
   selectedOrgId: undefined,
+  selectedViewMode: undefined,
   user: undefined,
   userLoading: false,
 };

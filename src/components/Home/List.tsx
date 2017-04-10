@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import * as models from '../../api/models';
 
 import Card from './Card';
@@ -8,6 +9,7 @@ export namespace ListComponent {
     board: models.Board;
     user: any;
     filterMyCards: boolean;
+    selectedViewMode: string;
   }
 }
 
@@ -16,7 +18,7 @@ export default class List extends React.Component<ListComponent.Props, {}> {
     const { user, filterMyCards, board } = this.props;
 
     return (
-      <div className="list">
+      <div className={ classNames('list', { double: !!this.props.selectedViewMode }) }>
         <strong>{ this.props.name }</strong>
 
         <ul className="card-container">
@@ -25,7 +27,7 @@ export default class List extends React.Component<ListComponent.Props, {}> {
               .filter((card) => !user || !filterMyCards || (filterMyCards && card.idMembers.indexOf(user.id) !== -1))
               .map((card) =>
                 <Card key={ card.id } { ...{ ...card, board } } />,
-            )
+              )
           }
         </ul>
 

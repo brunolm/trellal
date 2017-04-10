@@ -29,6 +29,8 @@ body {
 
     h2 {
       color: $white;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -47,6 +49,10 @@ body {
     vertical-align: top;
     white-space: normal;
     width: 250px;
+
+    &.double {
+      max-height: 1000px;
+    }
   }
 
   .card-container {
@@ -59,6 +65,7 @@ body {
     font-size: 90%;
     margin: 0 0 6px;
     padding: 10px;
+    word-break: break-word;
 
     .card-label {
       border-radius: 3px;

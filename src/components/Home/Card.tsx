@@ -4,13 +4,38 @@ import * as models from '../../api/models';
 export namespace CardComponent {
   export interface Props extends models.Card {
     board: models.Board;
+    boardName?: string;
   }
 }
 
 export default class Card extends React.Component<CardComponent.Props, {}> {
+  hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; ++i) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+  }
+
+  intToRGB(i) {
+    const c = (i & 0x00FFFFFF).toString(16).toUpperCase();
+    return '#' + '00000'.substring(0, 6 - c.length) + c;
+  }
+
+  getColor(id) {
+    return this.intToRGB(this.hashCode(id));
+  }
+
   render() {
+    const style = this.props.boardName ? {
+      borderLeftColor: this.getColor(this.props.boardName || '0'),
+      borderLeftStyle: 'solid',
+      borderLeftWidth: 10,
+    } : { };
+
     return (
-      <li className="card-item" title={ `#${this.props.idShort}` }>
+      <li className="card-item" title={ `#${this.props.idShort}` } style={ style }>
+        { this.props.id }
         <div>
           {
             this.props.labels.map((label) =>
@@ -18,6 +43,8 @@ export default class Card extends React.Component<CardComponent.Props, {}> {
             )
           }
         </div>
+        <div className="text-muted mr-1">{ this.props.boardName }</div>
+        <span className="text-muted mr-1">#{ this.props.idShort }</span>
         { this.props.name }
         <div className="card-members">
           {

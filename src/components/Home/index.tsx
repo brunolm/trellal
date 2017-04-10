@@ -40,6 +40,8 @@ export namespace Home {
     selectedBoards: MultiSelectComponent.SelectOption[];
     selectedLists: any[];
 
+    selectedViewMode: string;
+
     user: models.User;
 
     dispatch: any;
@@ -53,7 +55,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 @(connect as any)(mapStateToProps)
-export default class Home extends React.Component<Home.Props, { }> {
+export default class Home extends React.Component<Home.Props, {}> {
   static tokenSettingKey = 'token';
   static userSettingKey = 'user';
 
@@ -130,7 +132,62 @@ export default class Home extends React.Component<Home.Props, { }> {
     this.props.dispatch(actions.setSelectedLists(e));
   }
 
+  onViewModeChanged = (e) => {
+    this.props.dispatch(actions.changeViewMode(e.target.value));
+  }
+
+  filterLists(board) {
+    return board.lists.filter((list) => this.props.filteredLists.find((fl) => fl.id === list.id));
+  }
+  mapList(board, list) {
+    return { ...list, user: this.user, boardName: board.name };
+  }
+
   render() {
+    let singleBoard;
+
+    if (this.props.selectedViewMode === 'grouped') {
+      singleBoard = this.props.filteredBoards.reduce((board, next) => {
+        board.names.push(next.name);
+
+        board.lists = board.lists
+          .concat(this.filterLists(next).map((list) => this.mapList(next, list)));
+        board.filterMyCards = this.props.filterMyCards;
+
+        board.members = board.members.concat(next.members.filter((member) => !board.members.find((bm) => bm.id === member.id)));
+
+        board.user = this.props.user;
+
+        if (!board.prefs) {
+          board.prefs = next.prefs;
+        }
+        return board;
+      }, { name: '', names: [ ], lists: [ ], members: [ ], prefs: undefined });
+
+      singleBoard.name = singleBoard.names.join(', ');
+
+      const lists = singleBoard.lists.reduce((list, next) => {
+        const name = next.name.replace(/\s[\(\[].*?[\)\]]/g, '');
+        const hashName = name.toLowerCase();
+        const mapBoardName = (card) => ({ ...card, boardName: next.boardName });
+
+        list[hashName] = {
+          ...next,
+          name,
+          cards: list[hashName]
+            ? list[hashName].cards.concat(next.cards).map(mapBoardName)
+            : next.cards.map(mapBoardName),
+        };
+        return list;
+      }, { });
+
+      singleBoard.lists = Object.keys(lists).reduce((list, next) => {
+        list.push(lists[next]);
+        return list;
+      }, [ ]);
+      singleBoard.filteredLists = singleBoard.lists;
+    }
+
     return (
       <div>
         <div className="filters bg-inverse text-white">
@@ -149,7 +206,8 @@ export default class Home extends React.Component<Home.Props, { }> {
             </div>
           </div>
 
-          { this.props.selectedOrgId && !!this.props.boards.length &&
+          {
+            this.props.selectedOrgId && !!this.props.boards.length &&
             <div>
               <div className="row">
                 <div className="col-12 col-sm-4 col-xl-3">
@@ -166,18 +224,33 @@ export default class Home extends React.Component<Home.Props, { }> {
                     selectedItems={ this.props.selectedLists }
                     onChange={ this.onSelectLists } />
                 </div>
+                <div className="col-12 col-sm-4 col-xl-3">
+                  <label data-toggle="tooltip" data-placement="bottom">View mode</label>
+                  <select className="form-control" onChange={ this.onViewModeChanged } value={ this.props.selectedViewMode }>
+                    <option value="">All</option>
+                    <option value="grouped">Grouped</option>
+                  </select>
+                </div>
               </div>
             </div>
           }
         </div>
 
-        <div>
-          {
-            this.props.filteredBoards.map((board) =>
-              <Board key={ board.id } { ...{ ...board, ...this.props } } />,
-            )
-          }
-        </div>
+        {
+          singleBoard &&
+          <Board { ...{ ...singleBoard, ...this.props, user: this.user } } />
+        }
+
+        {
+          !singleBoard &&
+          <div>
+            {
+              this.props.filteredBoards.map((board) =>
+                <Board key={ board.id } { ...{ ...board, ...this.props, user: this.user } } />,
+              )
+            }
+          </div>
+        }
       </div>
     );
   }
