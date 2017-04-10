@@ -35,7 +35,6 @@ export default class Card extends React.Component<CardComponent.Props, {}> {
 
     return (
       <li className="card-item" title={ `#${this.props.idShort}` } style={ style }>
-        { this.props.id }
         <div>
           {
             this.props.labels.map((label) =>
@@ -43,8 +42,8 @@ export default class Card extends React.Component<CardComponent.Props, {}> {
             )
           }
         </div>
+        <span className="text-muted pull-right">#{ this.props.idShort }</span>
         <div className="text-muted mr-1">{ this.props.boardName }</div>
-        <span className="text-muted mr-1">#{ this.props.idShort }</span>
         { this.props.name }
         <div className="card-members">
           {

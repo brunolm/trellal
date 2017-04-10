@@ -1,3 +1,5 @@
+import './index.scss';
+
 import * as React from 'react';
 import * as fuzzy from 'fuzzy';
 
@@ -96,7 +98,7 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
     const noItems = items.length ? undefined : (<div className="dropdown-item">No results</div>);
 
     return (
-      <div className="dropdown">
+      <div className="dropdown multiselect">
         <div>
           <label data-toggle="tooltip" data-placement="bottom"
             title={ this.props.selectedItems.map((item) => item.label).join(', ') }>{ selectText }</label>

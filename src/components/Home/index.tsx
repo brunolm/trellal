@@ -175,7 +175,7 @@ export default class Home extends React.Component<Home.Props, {}> {
           ...next,
           name,
           cards: list[hashName]
-            ? list[hashName].cards.concat(next.cards).map(mapBoardName)
+            ? list[hashName].cards.concat(next.cards.map(mapBoardName))
             : next.cards.map(mapBoardName),
         };
         return list;
