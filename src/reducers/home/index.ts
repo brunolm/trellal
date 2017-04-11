@@ -6,6 +6,7 @@ import { default as getBoardsByOrg } from './get-boards-by-org';
 import { default as getOrganizations } from './get-organizations';
 import { default as getUser } from './get-user';
 import { default as init } from './init';
+import { default as refresh } from './refresh';
 import { default as setSelectedBoards } from './set-selected-boards';
 import { default as setSelectedLists } from './set-selected-lists';
 import { default as toggleUser } from './toggle-user';
@@ -27,7 +28,10 @@ const reducer = {
   [types.SetSelectedBoards]: setSelectedBoards,
   [types.SetSelectedLists]: setSelectedLists,
   [types.ToggleUser]: toggleUser,
-} as { [key: string]: (state: typeof InitialState, action: Action) => any; };
+  [types.RefreshError]: refresh,
+  [types.RefreshStart]: refresh,
+  [types.RefreshSuccess]: refresh,
+} as { [key: string]: (state: typeof InitialState, action: Action<any>) => any; };
 
 export const home = (state = InitialState, action) => {
   if (action.namespace !== baseAction.namespace) {

@@ -18,7 +18,7 @@ export default class List extends React.Component<ListComponent.Props, {}> {
     const { user, filterMyCards, board } = this.props;
 
     return (
-      <div className={ classNames('list', { double: !!this.props.selectedViewMode }) }>
+      <div className={ classNames('list', { double: !this.props.selectedViewMode }) }>
         <strong>{ this.props.name }</strong>
 
         <ul className="card-container">

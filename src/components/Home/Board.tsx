@@ -1,14 +1,16 @@
 import * as React from 'react';
+import * as boardService from '../../services/board';
 import * as models from '../../api/models';
 
 import DragScroll from '../Shared/DragScroll';
 import List from './List';
+import { SelectValue } from '../../models';
 
 export namespace BoardComponent {
   export interface Props extends models.Board {
-    filteredLists: models.List[];
     filterMyCards: boolean;
     hiddenBoards: string[];
+    selectedLists: SelectValue[];
     selectedViewMode: string;
     user: any;
   }
@@ -46,15 +48,17 @@ export default class Board extends React.Component<BoardComponent.Props, BoardCo
 
   render() {
     const {
-      filteredLists,
       filterMyCards,
       id,
       lists,
       name,
       prefs,
+      selectedLists,
       selectedViewMode,
       user,
     } = this.props;
+
+    const filteredLists = boardService.filterItemsByIds(lists, selectedLists.map((selectValue) => selectValue.value));
 
     return (
       <DragScroll>

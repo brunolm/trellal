@@ -5,6 +5,7 @@ import 'bootstrap';
 import * as $ from 'jquery';
 import * as React from 'react';
 import * as actions from '../../actions/home';
+import * as boardService from '../../services/board';
 import * as models from '../../api/models';
 
 import MultiSelect, { MultiSelectComponent } from '../Shared/MultiSelect';
@@ -14,6 +15,7 @@ import OrganizationSelect from './OrganizationSelect';
 import RefreshButton from './RefreshButton';
 import { RootState } from '../../reducers/index';
 import { RouteComponentProps } from 'react-router';
+import SelectViewMode from './SelectViewMode';
 import { connect } from 'react-redux';
 import parseUri from 'uri-sharp';
 
@@ -27,10 +29,10 @@ export namespace Home {
     selectedOrgId: string;
 
     boards: any[];
-    filteredBoards: any[];
+    filteredBoards: string[];
 
-    filteredBoardLists: any[];
-    filteredLists: any[];
+    filteredBoardLists: string[];
+    filteredLists: string[];
 
     filterMyCards: boolean;
 
@@ -81,7 +83,8 @@ export default class Home extends React.Component<Home.Props, {}> {
   }
 
   filterMyCards = (e) => {
-    if (/q/i.test(e.key)) {
+    const isEditableElement = !/button/i.test(e.target.tagName) && $(e.target).is(':input, [contenteditable]');
+    if (!isEditableElement && /q/i.test(e.key)) {
       this.props.dispatch(actions.toggleUser(this.token));
     }
   }
@@ -122,7 +125,7 @@ export default class Home extends React.Component<Home.Props, {}> {
   }
 
   refreshBoards = () => {
-    this.props.dispatch(actions.getBoardsByOrg(this.token, this.props.selectedOrgId));
+    this.props.dispatch(actions.refresh(this.token, this.props.selectedOrgId));
   }
 
   onSelectBoards = (e) => {
@@ -132,121 +135,95 @@ export default class Home extends React.Component<Home.Props, {}> {
     this.props.dispatch(actions.setSelectedLists(e));
   }
 
-  onViewModeChanged = (e) => {
-    this.props.dispatch(actions.changeViewMode(e.target.value));
+  onViewModeChanged = (value) => {
+    this.props.dispatch(actions.changeViewMode(value));
   }
 
   filterLists(board) {
-    return board.lists.filter((list) => this.props.filteredLists.find((fl) => fl.id === list.id));
+    return boardService.filterItemsByIds(board.lists, this.props.filteredLists);
   }
   mapList(board, list) {
     return { ...list, user: this.user, boardName: board.name };
   }
 
   render() {
-    let singleBoard;
+    const boards = boardService.filterItemsByIds(this.props.boards, this.props.filteredBoards);
+    const allFilteredLists = boardService.getBoardsLists(boards);
+    const filteredBoardLists = boardService.filterItemsByIds(allFilteredLists, this.props.filteredBoardLists);
 
-    if (this.props.selectedViewMode === 'grouped') {
-      singleBoard = this.props.filteredBoards.reduce((board, next) => {
-        board.names.push(next.name);
+    const singleBoard = boardService.getSingleBoard(boards, this.props.selectedLists, {
+      filterMyCards: this.props.filterMyCards,
+      selectedViewMode: this.props.selectedViewMode,
+      user: this.user,
+    });
 
-        board.lists = board.lists
-          .concat(this.filterLists(next).map((list) => this.mapList(next, list)));
-        board.filterMyCards = this.props.filterMyCards;
-
-        board.members = board.members.concat(next.members.filter((member) => !board.members.find((bm) => bm.id === member.id)));
-
-        board.user = this.props.user;
-
-        if (!board.prefs) {
-          board.prefs = next.prefs;
-        }
-        return board;
-      }, { name: '', names: [ ], lists: [ ], members: [ ], prefs: undefined });
-
-      singleBoard.name = singleBoard.names.join(', ');
-
-      const lists = singleBoard.lists.reduce((list, next) => {
-        const name = next.name.replace(/\s[\(\[].*?[\)\]]/g, '');
-        const hashName = name.toLowerCase();
-        const mapBoardName = (card) => ({ ...card, boardName: next.boardName });
-
-        list[hashName] = {
-          ...next,
-          name,
-          cards: list[hashName]
-            ? list[hashName].cards.concat(next.cards.map(mapBoardName))
-            : next.cards.map(mapBoardName),
-        };
-        return list;
-      }, { });
-
-      singleBoard.lists = Object.keys(lists).reduce((list, next) => {
-        list.push(lists[next]);
-        return list;
-      }, [ ]);
-      singleBoard.filteredLists = singleBoard.lists;
-    }
+    const filtersVisible = this.props.selectedOrgId && !!this.props.boards.length;
 
     return (
       <div>
         <div className="filters bg-inverse text-white">
+          <div>
+            <h1>Trellal <sup>Alpha</sup></h1>
+            {
+              this.props.boardsLoading &&
+              <i className="fa fa-2x fa-circle-o-notch fa-spin ml-2"></i>
+            }
+          </div>
           <div className="row">
-            <div className="col-12 col-sm-6 form-inline">
+            <div className="col-12 form-inline">
               <OrganizationSelect
+                className="mr-1 my-1"
                 organizations={ this.props.organizations }
                 loading={ this.props.organizationsLoading || this.props.boardsLoading }
                 onOrganizationChange={ this.onOrganizationChange }
               />
 
-              <RefreshButton
-                loading={ this.props.boardsLoading }
-                refresh={ this.refreshBoards }
-              />
+            {
+              filtersVisible &&
+                <MultiSelect
+                  className="mr-1 my-1"
+                  items={ this.props.boards.map((board) => ({ value: board.id, label: board.name })) }
+                  label="Boards"
+                  selectedItems={ this.props.selectedBoards }
+                  onChange={ this.onSelectBoards } />
+            }
+            {
+              filtersVisible &&
+                <MultiSelect
+                  className="mr-1 my-1"
+                  items={ filteredBoardLists.map((board) => ({ value: board.id, label: board.name })) }
+                  label="Lists"
+                  selectedItems={ this.props.selectedLists }
+                  onChange={ this.onSelectLists } />
+            }
+
+            {
+              filtersVisible &&
+              <div className="my-2">
+                <SelectViewMode onViewModeChanged={ this.onViewModeChanged } className="mr-2" />
+
+                <RefreshButton
+                  refresh={ this.refreshBoards }
+                />
+              </div>
+            }
             </div>
           </div>
 
-          {
-            this.props.selectedOrgId && !!this.props.boards.length &&
-            <div>
-              <div className="row">
-                <div className="col-12 col-sm-4 col-xl-3">
-                  <MultiSelect
-                    items={ this.props.boards.map((board) => ({ value: board.id, label: board.name })) }
-                    label="Boards"
-                    selectedItems={ this.props.selectedBoards }
-                    onChange={ this.onSelectBoards } />
-                </div>
-                <div className="col-12 col-sm-4 col-xl-3">
-                  <MultiSelect
-                    items={ this.props.filteredBoardLists.map((board) => ({ value: board.id, label: board.name })) }
-                    label="Lists"
-                    selectedItems={ this.props.selectedLists }
-                    onChange={ this.onSelectLists } />
-                </div>
-                <div className="col-12 col-sm-4 col-xl-3">
-                  <label data-toggle="tooltip" data-placement="bottom">View mode</label>
-                  <select className="form-control" onChange={ this.onViewModeChanged } value={ this.props.selectedViewMode }>
-                    <option value="">All</option>
-                    <option value="grouped">Grouped</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          }
+
         </div>
 
         {
           singleBoard &&
-          <Board { ...{ ...singleBoard, ...this.props, user: this.user } } />
+          <Board { ...{ ...this.props, ...singleBoard, user: this.user } } />
         }
 
         {
           !singleBoard &&
           <div>
             {
-              this.props.filteredBoards.map((board) =>
-                <Board key={ board.id } { ...{ ...board, ...this.props, user: this.user } } />,
+              boards.map((board) =>
+                <Board key={ board.id } { ...{ ...this.props, ...board, user: this.user } } />,
               )
             }
           </div>

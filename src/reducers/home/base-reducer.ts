@@ -1,23 +1,13 @@
-interface Board {
-  id: string;
-  name: string;
-  lists: List[];
-}
-
-interface List {
-  cards: any[];
-  id: string;
-  name: string;
-}
+import { Board } from '../../api/models';
 
 export const InitialState = {
   boards: [] as Board[],
   boardsLoading: false,
   error: undefined,
   filterMyCards: false,
-  filteredBoardLists: [] as List[],
-  filteredBoards: [],
-  filteredLists: [] as Array<{ value: any; label: any; }>,
+  filteredBoardLists: [] as string[],
+  filteredBoards: [] as string[],
+  filteredLists: [] as string[],
   organizations: [],
   organizationsLoading: false,
   selectedBoards: [],

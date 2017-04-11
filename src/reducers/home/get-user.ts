@@ -4,7 +4,7 @@ import { Action } from '../base-reducer';
 import { InitialState } from './base-reducer';
 import { types } from '../../actions/home';
 
-export default function getUser(state: typeof InitialState, action: Action) {
+export default function getUser(state: typeof InitialState, action: Action<any>) {
   switch (action.type) {
     case types.GetUserStart:
       return {

@@ -6,15 +6,15 @@ import { Board } from '../../api/models';
 import { InitialState } from './base-reducer';
 import { types } from '../../actions/home';
 
-export default function getBoardsByOrg(state: typeof InitialState, action: Action<any>) {
+export default function refresh(state: typeof InitialState, action: Action<any>) {
   switch (action.type) {
-    case types.GetOrganizationBoardStart:
+    case types.RefreshStart:
       return {
         ...state,
         boardsLoading: true,
       };
 
-    case types.GetOrganizationBoardSuccess: {
+    case types.RefreshSuccess: {
       const boards = clone(action.data);
       const filteredBoards = clone(action.data).map((board) => board.id);
       const filteredBoardLists = boardService.getBoardsLists(boardService.filterItemsByIds<Board>(clone(boards), filteredBoards))
@@ -32,15 +32,10 @@ export default function getBoardsByOrg(state: typeof InitialState, action: Actio
         filteredLists,
 
         boardsLoading: false,
-
-        selectedBoards: clone(boards).map((board) => ({ value: board.id, label: board.name })),
-        selectedLists: boardService.filterItemsByIds(boardService.getBoardsLists(clone(boards)), filteredLists)
-          .map((list) => ({ value: list.id, label: list.name }))
-          .sort((a, b) => a.label.localeCompare(b.label)),
       };
     }
 
-    case types.GetOrganizationBoardError:
+    case types.RefreshError:
       return {
         ...state,
         boards: [],

@@ -1,33 +1,29 @@
+import * as boardService from '../../services/board';
 import * as clone from 'clone';
 
 import { Action } from '../base-reducer';
 import { InitialState } from './base-reducer';
+import { SelectValue } from '../../models';
 
-export default function init(state: typeof InitialState, action: Action) {
+export default function setSelectedBoards(state: typeof InitialState, action: Action<SelectValue[]>) {
   const ids = action.data.map((sel) => sel.value);
-  const filteredBoards = clone(state.boards).filter((board) => ids.find((id) => id === board.id));
-  const filteredBoardLists = clone(filteredBoards)
-    .map((board) => board.lists || [])
-    .reduce((a, next) => a.concat(next), [])
-    .sort((a, b) => a.name.localeCompare(b.name));
 
-  const filteredLists = clone(filteredBoardLists)
-    .filter((list) => state.selectedLists.find((sl) => sl.value === list.id))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const filteredBoards = boardService.filterItemsByIds(clone(state.boards), ids);
+  const filteredBoardLists = boardService.getBoardsLists(filteredBoards);
 
-  const selectedLists = clone(filteredLists)
-    .map((list) => ({ value: list.id, label: list.name }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+  const newLists = filteredBoardLists.filter((list) => state.filteredBoardLists.indexOf(list.id) === -1);
+
+  const keepSelected = state.selectedLists.filter((selectValue) => filteredBoardLists.find((list) => list.id === selectValue.value));
+  const selectedLists: SelectValue[] =
+    [ ...new Set(keepSelected.concat(newLists.map((list) => ({ value: list.id, label: list.name })))) ];
 
   return {
     ...state,
 
-    filteredBoards,
+    filteredBoardLists: filteredBoardLists.map((list) => list.id),
+    filteredBoards: filteredBoards.map((board) => board.id),
+
     selectedBoards: clone(action.data),
-
-    filteredBoardLists,
-    filteredLists,
-
     selectedLists,
   };
 }

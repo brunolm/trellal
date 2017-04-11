@@ -33,6 +33,8 @@ render(
   document.getElementById('root'),
 );
 
+console.log('GitHub: https://github.com/brunolm/trellal');
+
 declare var module: any;
 if (module.hot) {
   module.hot.accept();

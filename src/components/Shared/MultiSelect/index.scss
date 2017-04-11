@@ -1,8 +1,23 @@
+$bootstrap-4-magic-number: 576px;
+
 body {
   .multiselect {
+    width: 100%;
+
     .dropdown-menu {
       max-height: 400px;
       overflow: auto;
+      width: 100%;
+
+      button {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  @media (min-width: $bootstrap-4-magic-number) {
+    .multiselect {
+      width: auto;
     }
   }
 }

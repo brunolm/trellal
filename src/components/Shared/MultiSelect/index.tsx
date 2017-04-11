@@ -1,10 +1,12 @@
 import './index.scss';
 
 import * as React from 'react';
+import * as classNames from 'classnames';
 import * as fuzzy from 'fuzzy';
 
 export namespace MultiSelectComponent {
   export interface Props {
+    className?: string;
     items: SelectOption[];
     label?: string;
     selectedItems: SelectOption[];
@@ -66,7 +68,13 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
     });
   }
 
-  resetSearch = (e) => this.setState({ search: '' });
+  resetSearch = (e) => {
+    this.setState({ search: '' });
+
+    this.setState({
+      hidden: true,
+    });
+  }
 
   show = (e) => this.setState({ hidden: false });
   hide = (e) => {
@@ -98,13 +106,10 @@ export default class MultiSelect extends React.Component<MultiSelectComponent.Pr
     const noItems = items.length ? undefined : (<div className="dropdown-item">No results</div>);
 
     return (
-      <div className="dropdown multiselect">
+      <div className={ classNames('dropdown multiselect', this.props.className) }>
         <div>
-          <label data-toggle="tooltip" data-placement="bottom"
-            title={ this.props.selectedItems.map((item) => item.label).join(', ') }>{ selectText }</label>
-
           <div className="input-group">
-            <input type="search" className="dropdown-toggle form-control" placeholder="Select..."
+            <input type="search" className="dropdown-toggle form-control" placeholder={ selectText }
               value={ this.state.search }
               onFocus={ this.show }
               onChange={ (e) => this.onSearchChange(e) }

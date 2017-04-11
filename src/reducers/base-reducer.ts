@@ -1,6 +1,6 @@
-export interface Action {
+export interface Action<T> {
   namespace: string;
   type: string;
-  data: any;
+  data: T;
   [key: string]: any;
 }
