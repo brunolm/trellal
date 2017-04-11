@@ -15,6 +15,10 @@ $label-color-lime: #51e898;
 $label-color-pink: #ff80ce;
 $label-color-black: #4d4d4d;
 
+$scrollbar-bg: #0079bf;
+$scrollbar-shadow: rgba(0, 0, 0, .75);
+$scrollbar-thumb: #004f7d;
+
 body {
   h1 {
     display: inline-block;
@@ -144,22 +148,25 @@ body {
       }
     }
   }
-}
 
-body {
+  // sass-lint:disable no-vendor-prefixes
   ::-webkit-scrollbar {
-    background: #0079bf;
+    background: $scrollbar-bg;
     height: 12px;
     width: 12px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #004f7d;
     -webkit-border-radius: 1ex;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0 1px 2px $scrollbar-shadow;
+    background: $scrollbar-thumb;
+    border-radius: 1ex;
+    box-shadow: 0 1px 2px $scrollbar-shadow;
   }
 
   ::-webkit-scrollbar-corner {
-    background: #000;
+    background: $black;
   }
+  // sass-lint:enable no-vendor-prefixes
 }
+

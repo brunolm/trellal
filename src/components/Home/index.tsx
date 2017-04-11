@@ -210,7 +210,6 @@ export default class Home extends React.Component<Home.Props, {}> {
             </div>
           </div>
 
-
         </div>
 
         {

@@ -33,7 +33,7 @@ render(
   document.getElementById('root'),
 );
 
-console.log('GitHub: https://github.com/brunolm/trellal');
+console.log('GitHub: https://github.com/brunolm/trellal'); // tslint:disable-line
 
 declare var module: any;
 if (module.hot) {

@@ -1,4 +1,3 @@
-import * as boardService from '../../services/board';
 import * as clone from 'clone';
 
 import { Action } from '../base-reducer';

@@ -26,6 +26,3 @@ export default class SelectViewMode extends React.Component<SelectViewMode.Props
     );
   }
 }
-
-
-
