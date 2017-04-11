@@ -16,12 +16,12 @@ export default class SelectViewMode extends React.Component<SelectViewMode.Props
   render() {
     return (
       <div className={ classNames('btn-group', this.props.className) } data-toggle="buttons">
-        <label className="btn btn-primary active" onClick={ () => this.onViewModeChanged(undefined) }>
+        <button className="btn btn-primary active" onClick={ () => this.onViewModeChanged(undefined) }>
           <input type="radio" name="options" /> <i className="fa fa-trello" aria-hidden></i>
-        </label>
-        <label className="btn btn-primary" onClick={ (e) => this.onViewModeChanged('all') }>
+        </button>
+        <button className="btn btn-primary" onClick={ (e) => this.onViewModeChanged('all') }>
           <input type="radio" name="options" /> <i className="fa fa-list" aria-hidden></i>
-        </label>
+        </button>
       </div>
     );
   }
