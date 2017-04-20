@@ -60,9 +60,18 @@ export default class Board extends React.Component<BoardComponent.Props, BoardCo
 
     const filteredLists = boardService.filterItemsByIds(lists, selectedLists.map((selectValue) => selectValue.value));
 
+    const style = {
+      backgroundColor: prefs.backgroundColor,
+      backgroundImage: undefined,
+    };
+
+    if (prefs.backgroundImage) {
+      style.backgroundImage = `url(${prefs.backgroundImage})`;
+    }
+
     return (
       <DragScroll>
-        <div className="board" data-id={ id } style={ { background: prefs.backgroundColor } } title={ name }>
+        <div className="board" data-id={ id } style={ style } title={ name }>
           <h2 onClick={ () => this.hideBoard(id) } className="board-name">{ name }</h2>
           <div className="board-canvas" hidden={ this.state.hiddenBoards.indexOf(id) !== -1 }>
 
